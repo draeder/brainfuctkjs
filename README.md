@@ -9,6 +9,8 @@ A lightweight, fast Brainfuck interpreter written in JavaScript.
 - 🔄 30,000-cell tape with wraparound support
 - 🎯 Full Brainfuck language support
 - 🛡️ Error handling for unmatched brackets
+- ⏱️ Configurable step limit to prevent infinite loops
+- 🔢 Byte output mode for efficient binary data handling
 - 📦 Zero dependencies
 - ✅ Comprehensive test suite
 
@@ -35,23 +37,55 @@ console.log(output); // "Hello World!\n"
 const cat = ',[.,]';
 const result = brainfuck(cat, 'hello');
 console.log(result); // "hello"
+
+// With step limit (safe for untrusted code)
+try {
+  brainfuck('+[+]', '', { maxSteps: 10000 }); // Throws after 10k steps
+} catch (e) {
+  console.error('Infinite loop prevented:', e.message);
+}
+
+// Byte output for binary data
+const bytes = brainfuck.bytes('++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.', '');
+console.log(bytes); // Uint8Array [72, 101, ...]
 ```
 
 ## API
 
-### `brainfuck(code, [input])`
+### `brainfuck(code, [input], [opts])`
 
-Executes Brainfuck code and returns the output.
+Executes Brainfuck code and returns the output as a string.
 
 **Parameters:**
 - `code` (string): The Brainfuck source code to execute
 - `input` (string, optional): Input string consumed by `,` instructions. Defaults to empty string.
+- `opts` (object, optional): Options object
+  - `maxSteps` (number): Maximum number of steps before throwing. Defaults to 1,000,000.
 
 **Returns:**
 - (string): The output produced by `.` instructions
 
 **Throws:**
 - Error if brackets are unmatched
+- Error if step limit is exceeded
+
+### `brainfuck.bytes(code, [input], [opts])`
+
+Executes Brainfuck code and returns the output as a Uint8Array. More efficient for binary data and avoids UTF-16 string overhead.
+
+**Parameters:**
+- `code` (string): The Brainfuck source code to execute
+- `input` (string, optional): Input string consumed by `,` instructions. Defaults to empty string.
+- `opts` (object, optional): Options object
+  - `maxSteps` (number): Maximum number of steps before throwing. Defaults to 1,000,000.
+  - `onOutput` (function): Optional callback called with each output byte.
+
+**Returns:**
+- (Uint8Array): The output bytes produced by `.` instructions
+
+**Throws:**
+- Error if brackets are unmatched
+- Error if step limit is exceeded
 
 ## Brainfuck Language Reference
 
@@ -88,6 +122,31 @@ brainfuck(',[.,]', 'test'); // "test"
 brainfuck('++[->+++++<]>.')  // Outputs character with ASCII value 10
 ```
 
+### Safe execution for genetic algorithms / evolution
+```javascript
+// Evaluate untrusted code safely with step limit
+function evaluateFitness(code, testInput) {
+  try {
+    const output = brainfuck.bytes(code, testInput, { 
+      maxSteps: 50000  // Prevent runaway evolution
+    });
+    return calculateScore(output);
+  } catch (e) {
+    return 0; // Failed programs get zero fitness
+  }
+}
+
+// Stream output for real-time monitoring
+const outputBytes = [];
+brainfuck.bytes(code, input, {
+  maxSteps: 100000,
+  onOutput: (byte) => {
+    outputBytes.push(byte);
+    console.log('Output byte:', byte);
+  }
+});
+```
+
 ## Implementation Details
 
 - **Tape size**: 30,000 cells (Uint8Array)
@@ -95,6 +154,8 @@ brainfuck('++[->+++++<]>.')  // Outputs character with ASCII value 10
 - **Pointer behavior**: Wraps around at both ends of the tape
 - **Input handling**: Returns 0 when input is exhausted
 - **Performance**: Bracket matching is pre-computed for O(1) loop jumps
+- **Step limit**: Default 1,000,000 steps (configurable)
+- **Byte output**: Zero-copy byte array, no UTF-16 string overhead
 
 ## Testing
 
