@@ -26,7 +26,7 @@ cd brainfuct
 ## Usage
 
 ```javascript
-const brainfuck = require('brainfuctkjs');
+import brainfuck from 'brainfuct';
 
 // Hello World program
 const code = '++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.';

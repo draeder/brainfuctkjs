@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Brainfuck interpreter.
  *
@@ -174,4 +172,5 @@ brainfuck.bytes = function(code, input = '', opts = {}) {
   return new Uint8Array(output);
 };
 
-module.exports = brainfuck;
+export default brainfuck;
+export { brainfuck };

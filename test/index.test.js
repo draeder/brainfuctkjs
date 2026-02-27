@@ -1,8 +1,6 @@
-'use strict';
-
-const { describe, it } = require('node:test');
-const assert = require('node:assert/strict');
-const brainfuck = require('../index.js');
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
+import brainfuck from '../index.js';
 
 describe('brainfuck interpreter', () => {
   it('outputs a single character via .', () => {
