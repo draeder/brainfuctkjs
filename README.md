@@ -82,7 +82,7 @@ brainfuck('+'.repeat(65) + '.'); // "A"
 brainfuck(',[.,]', 'test'); // "test"
 ```
 
-### Addition (2 + 5 = 7)
+### Multiplication (2 × 5 = 10)
 ```javascript
 // Cell 0 = 2, loop adds 5 to cell 1 for each count in cell 0
 brainfuck('++[->+++++<]>.')  // Outputs character with ASCII value 10
