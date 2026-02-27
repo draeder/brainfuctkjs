@@ -1,4 +1,4 @@
-# brainfuctkjs
+# brainfuct
 
 A lightweight, fast Brainfuck interpreter written in JavaScript.
 
