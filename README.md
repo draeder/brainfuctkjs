@@ -19,8 +19,8 @@ A lightweight, fast Brainfuck interpreter written in JavaScript.
 Clone the repository and require it locally:
 
 ```bash
-git clone https://github.com/danraeder/brainfuctkjs.git
-cd brainfuctkjs
+git clone https://github.com/draeder/brainfuct.git
+cd brainfuct
 ```
 
 ## Usage
