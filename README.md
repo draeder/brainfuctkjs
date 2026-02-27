@@ -78,6 +78,7 @@ Executes Brainfuck code and returns the output as a Uint8Array. More efficient f
 - `input` (string, optional): Input string consumed by `,` instructions. Defaults to empty string.
 - `opts` (object, optional): Options object
   - `maxSteps` (number): Maximum number of steps before throwing. Defaults to 1,000,000.
+  - `maxOutput` (number): Maximum output bytes before throwing. Defaults to 1,000,000.
   - `onOutput` (function): Optional callback called with each output byte.
 
 **Returns:**
@@ -86,6 +87,7 @@ Executes Brainfuck code and returns the output as a Uint8Array. More efficient f
 **Throws:**
 - Error if brackets are unmatched
 - Error if step limit is exceeded
+- Error if output limit is exceeded
 
 ## Brainfuck Language Reference
 

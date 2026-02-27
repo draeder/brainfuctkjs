@@ -90,11 +90,13 @@ function brainfuck(code, input = '', opts = {}) {
  * @param {string} [input=''] - Input string consumed by `,` instructions.
  * @param {object} [opts={}] - Options object.
  * @param {number} [opts.maxSteps=1000000] - Maximum number of steps before throwing.
+ * @param {number} [opts.maxOutput=1000000] - Maximum output bytes before throwing.
  * @param {function} [opts.onOutput] - Optional callback for each output byte.
  * @returns {Uint8Array} The output bytes produced by `.` instructions.
  */
 brainfuck.bytes = function(code, input = '', opts = {}) {
   const maxSteps = opts.maxSteps ?? 1000000;
+  const maxOutput = opts.maxOutput ?? 1000000;
   const onOutput = opts.onOutput;
   const tape = new Uint8Array(30000);
   let dp = 0;
@@ -142,6 +144,9 @@ brainfuck.bytes = function(code, input = '', opts = {}) {
         tape[dp] = (tape[dp] - 1 + 256) & 0xff;
         break;
       case '.':
+        if (output.length >= maxOutput) {
+          throw new Error(`Exceeded maximum output limit of ${maxOutput} bytes`);
+        }
         output.push(tape[dp]);
         if (onOutput) onOutput(tape[dp]);
         break;
